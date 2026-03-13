@@ -1,0 +1,142 @@
+# Python 환경
+.venv/
+venv/
+env/
+ENV/
+*.py[cod]
+__pycache__/
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# 가상환경 (다양한 이름)
+.env
+.venv
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE 및 에디터
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.project
+.pydevproject
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# 테스트 및 커버리지
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# 로깅 및 로그 파일
+logs/
+*.log
+*.log.*
+
+# 데이터 파일 및 결과
+data/
+results/
+backups/
+*.xlsx
+*.csv
+*.xls
+!config/
+
+# 임시 파일
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# 환경 변수
+.env
+.env.local
+.env.*.local
+
+# 데이터베이스
+*.db
+*.sqlite
+*.sqlite3
+
+# 캐시
+.cache/
+*.cache
+
+# 시스템 파일
+.AppleDouble
+.LSOverride
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# MacOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux
+.directory
+.Trash-*
+
+# IDE 설정
+.idea/
+.vscode/
+*.code-workspace
+.eclipse/
+.project
+.pydevproject
+.settings/
+
+# npm (프론트엔드 관련)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# 기타
+.git/
+.gitkeep
+*.pid

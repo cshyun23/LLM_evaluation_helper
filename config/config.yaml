@@ -1,0 +1,98 @@
+# LLM Evaluation Helper - Configuration File
+
+# vLLM 서버 설정
+vllm:
+  # 실제 vLLM 서버 주소 (프로덕션)
+  api_url: "http://localhost:8000/v1"
+  
+  # 테스트 모드 (더미 응답)
+  test_mode: true  # true: 더미 응답, false: 실제 vLLM 호출
+  
+  # 타임아웃 설정
+  timeout: 30
+  
+  # 재시도 설정
+  max_retries: 3
+  retry_delay: 1
+
+# 모델 정의
+models:
+  model_1:
+    name: "meta-llama/Llama-2-7b-hf"
+    max_tokens: 512
+    temperature: 0.7
+    top_p: 0.95
+    
+  model_2:
+    name: "mistralai/Mistral-7B-Instruct-v0.1"
+    max_tokens: 512
+    temperature: 0.7
+    top_p: 0.95
+    
+  model_3:
+    name: "meta-llama/Llama-2-13b-hf"
+    max_tokens: 1024
+    temperature: 0.5
+    top_p: 0.9
+
+# 프롬프트 템플릿 정의
+prompts:
+  template_1:
+    name: "Simple QA"
+    template: "질문: {input}\n답변:"
+    
+  template_2:
+    name: "Detailed QA"
+    template: "다음 질문에 대해 상세하게 답변하세요:\n질문: {input}\n상세 답변:"
+    
+  template_3:
+    name: "English QA"
+    template: "Question: {input}\nAnswer:"
+    
+  template_4:
+    name: "Classification"
+    template: "분류: {input}\n분류 결과:"
+
+# 데이터 경로 설정
+data:
+  input_dir: "./data"
+  output_dir: "./results"
+  
+  # 백업 설정
+  backup_enabled: true
+  backup_dir: "./backups"
+
+# 로깅 설정
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "./logs/app.log"
+  max_file_size: 10485760  # 10MB
+  backup_count: 5
+
+# 서버 설정
+server:
+  host: "0.0.0.0"
+  port: 8001
+  reload: true  # 개발 환경에서 자동 리로드
+  workers: 4
+
+# 처리 설정
+processing:
+  batch_size: 10
+  max_workers: 4
+  timeout_per_request: 60
+
+# UI 설정
+ui:
+  title: "LLM Evaluation Helper"
+  max_upload_size: 52428800  # 50MB
+  allowed_file_types:
+    - ".xlsx"
+    - ".csv"
+
+# 기능 플래그
+features:
+  batch_processing: true
+  export_results: true
+  comparison_view: true
