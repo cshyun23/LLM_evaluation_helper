@@ -38,16 +38,31 @@ class DataManager:
             self.backup_dir.mkdir(parents=True, exist_ok=True)
     
     def list_files(self) -> List[str]:
-        """입력 디렉토리의 Excel/CSV 파일 목록 반환"""
+        """data 디렉토리의 Excel/CSV 파일 목록 반환"""
         files = []
         for ext in ['*.xlsx', '*.csv', '*.xls']:
             files.extend([f.name for f in self.input_dir.glob(ext)])
         return sorted(files)
-    
+
+    def list_result_files(self) -> List[str]:
+        """results 디렉토리의 Excel/CSV 파일 목록 반환"""
+        files = []
+        for ext in ['*.xlsx', '*.csv', '*.xls']:
+            files.extend([f.name for f in self.output_dir.glob(ext)])
+        return sorted(files)
+
+    def find_file_path(self, file_name: str) -> Path:
+        """data 또는 results 디렉토리에서 파일 경로 반환"""
+        for directory in [self.input_dir, self.output_dir]:
+            p = directory / file_name
+            if p.exists():
+                return p
+        raise FileNotFoundError(f"파일을 찾을 수 없습니다: {file_name}")
+
     def get_sheets(self, file_name: str) -> List[str]:
         """파일의 시트 목록 반환"""
-        file_path = self.input_dir / file_name
-        
+        file_path = self.find_file_path(file_name)
+
         if not file_path.exists():
             raise FileNotFoundError(f"파일을 찾을 수 없습니다: {file_name}")
         
@@ -64,14 +79,11 @@ class DataManager:
     def read_sheet(self, file_name: str, sheet_name: str) -> Tuple[pd.DataFrame, List[str]]:
         """
         시트 데이터 읽기
-        
+
         Returns:
             (데이터프레임, 컬럼 이름 리스트)
         """
-        file_path = self.input_dir / file_name
-        
-        if not file_path.exists():
-            raise FileNotFoundError(f"파일을 찾을 수 없습니다: {file_name}")
+        file_path = self.find_file_path(file_name)
         
         try:
             if file_name.endswith('.csv'):
@@ -155,10 +167,7 @@ class DataManager:
     
     def get_file_info(self, file_name: str) -> Dict[str, Any]:
         """파일 정보 조회"""
-        file_path = self.input_dir / file_name
-        
-        if not file_path.exists():
-            raise FileNotFoundError(f"파일을 찾을 수 없습니다: {file_name}")
+        file_path = self.find_file_path(file_name)
         
         try:
             sheets = self.get_sheets(file_name)

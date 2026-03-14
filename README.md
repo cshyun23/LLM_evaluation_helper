@@ -141,6 +141,59 @@ GET /data?file_name=data.xlsx&sheet_name=Sheet1
 
 ---
 
+## 🚀 서버 실행
+
+### 환경 준비
+
+```bash
+# 가상환경 생성 (최초 1회)
+python -m venv .venv
+
+# 가상환경 활성화
+.venv\Scripts\activate          # Windows CMD
+.venv\Scripts\Activate.ps1     # Windows PowerShell
+source .venv/bin/activate       # Linux/Mac
+
+# 의존성 설치
+pip install -r requirements.txt
+```
+
+### 서버 시작
+
+```bash
+# 방법 1: python 직접 실행 (권장)
+python main.py
+
+# 방법 2: uvicorn 명령어로 실행
+uvicorn main:app --host 0.0.0.0 --port 8001
+
+# 방법 3: uvicorn + 자동 리로드 (개발 시)
+uvicorn main:app --host 0.0.0.0 --port 8001 --reload
+```
+
+> 기본 포트: **8001** (`config/config.yaml`의 `server.port`에서 변경 가능)
+
+### 접속 확인
+
+| URL | 설명 |
+|-----|------|
+| `http://localhost:8001` | API 루트 (상태 확인) |
+| `http://localhost:8001/docs` | Swagger UI (API 문서) |
+| `http://localhost:8001/redoc` | ReDoc API 문서 |
+| `http://localhost:8001/health` | 헬스 체크 |
+
+### 모드 전환
+
+`config/config.yaml`에서 `vllm.test_mode` 값으로 전환합니다.
+
+```yaml
+vllm:
+  test_mode: true   # 더미 응답 (vLLM 서버 불필요)
+  test_mode: false  # 실제 vLLM 서버 호출
+```
+
+---
+
 ## 🛠️ 기술 스택
 - **Backend**: Python (FastAPI)
 - **Frontend**: HTML/CSS/JavaScript

@@ -5,11 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LLM Evaluation Helper</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -19,11 +15,11 @@
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
             background: white;
             border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             overflow: hidden;
         }
 
@@ -34,15 +30,8 @@
             text-align: center;
         }
 
-        header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
-
-        header p {
-            font-size: 1.1em;
-            opacity: 0.9;
-        }
+        header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        header p { font-size: 1.1em; opacity: 0.9; }
 
         .main-content {
             display: grid;
@@ -66,36 +55,39 @@
             padding-bottom: 10px;
         }
 
-        .section h3 {
-            color: #495057;
-            margin: 15px 0 10px 0;
-            font-size: 1.1em;
+        .full-width { grid-column: 1 / -1; }
+
+        /* 버튼 */
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            font-size: 1em;
         }
 
-        /* 파일 업로드/다운로드 섹션 */
-        .file-section {
-            grid-column: 1 / -1;
-        }
+        .btn-primary { background: #667eea; color: white; }
+        .btn-primary:hover { background: #5568d3; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102,126,234,0.4); }
+        .btn-success { background: #28a745; color: white; }
+        .btn-success:hover { background: #218838; transform: translateY(-2px); }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-danger:hover { background: #c82333; }
+        .btn-secondary { background: #6c757d; color: white; }
+        .btn-secondary:hover { background: #5a6268; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
 
+        /* 파일 관리 */
         .file-controls {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
         }
 
-        .file-input-wrapper {
-            position: relative;
-            overflow: hidden;
-            display: inline-block;
-            width: 100%;
-        }
-
-        .file-input-wrapper input[type=file] {
-            position: absolute;
-            left: -9999px;
-        }
-
+        .file-input-wrapper { position: relative; overflow: hidden; display: inline-block; width: 100%; }
+        .file-input-wrapper input[type=file] { position: absolute; left: -9999px; }
         .file-input-label {
             display: block;
             padding: 12px 20px;
@@ -107,150 +99,101 @@
             transition: background 0.3s;
             font-weight: 500;
         }
+        .file-input-label:hover { background: #5568d3; }
 
-        .file-input-label:hover {
-            background: #5568d3;
-        }
-
-        button {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s;
-            font-size: 1em;
-        }
-
-        .btn-primary {
-            background: #667eea;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #5568d3;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-success {
-            background: #28a745;
-            color: white;
-        }
-
-        .btn-success:hover {
-            background: #218838;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
-        }
-
-        .btn-danger {
-            background: #dc3545;
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background: #c82333;
-        }
-
-        .btn-secondary {
-            background: #6c757d;
-            color: white;
-        }
-
-        .btn-secondary:hover {
-            background: #5a6268;
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* 데이터 정보 섹션 */
-        .data-info {
-            background: white;
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-        }
-
+        /* 파일 정보 */
+        .data-info { background: white; padding: 15px; border-radius: 6px; }
         .info-row {
             display: flex;
             justify-content: space-between;
+            align-items: flex-start;
             padding: 8px 0;
             border-bottom: 1px solid #e9ecef;
+            gap: 10px;
         }
+        .info-row:last-child { border-bottom: none; }
+        .info-label { font-weight: 600; color: #495057; white-space: nowrap; }
+        .info-value { color: #667eea; font-weight: 500; text-align: right; word-break: break-all; }
 
-        .info-row:last-child {
-            border-bottom: none;
-        }
-
-        .info-label {
-            font-weight: 600;
-            color: #495057;
-        }
-
-        .info-value {
-            color: #667eea;
-            font-weight: 500;
-        }
-
-        /* 시트 선택 */
-        .sheet-selector {
-            margin-bottom: 20px;
-        }
-
-        select, input {
+        /* 폼 요소 */
+        select, input[type=text] {
             width: 100%;
             padding: 10px;
             border: 1px solid #dee2e6;
             border-radius: 6px;
             font-size: 1em;
             margin-bottom: 10px;
+            background: white;
         }
-
         select:focus, input:focus {
             outline: none;
             border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
         }
 
-        /* 매개변수 설정 섹션 */
-        .param-section {
-            background: white;
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-        }
+        .param-group { margin-bottom: 15px; }
+        .param-group:last-child { margin-bottom: 0; }
+        .param-label { display: block; margin-bottom: 5px; color: #495057; font-weight: 500; font-size: 0.95em; }
 
-        .param-group {
-            margin-bottom: 15px;
-        }
+        .param-section { background: white; padding: 15px; border-radius: 6px; margin-bottom: 15px; }
 
-        .param-group:last-child {
-            margin-bottom: 0;
-        }
-
-        .param-label {
-            display: block;
-            margin-bottom: 5px;
-            color: #495057;
-            font-weight: 500;
-            font-size: 0.95em;
-        }
-
-        /* 비교 뷰 섹션 */
-        .comparison-section {
-            grid-column: 1 / -1;
-        }
-
-        .comparison-container {
+        .execution-controls {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-top: 20px;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        /* 상태 메시지 */
+        .status-message { padding: 12px 15px; border-radius: 6px; margin-top: 10px; display: none; }
+        .status-message.show { display: block; }
+        .status-message.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .status-message.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .status-message.info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+
+        /* tqdm 스타일 진행바 */
+        .progress-section {
+            margin-top: 15px;
+            background: #1e1e1e;
+            border-radius: 6px;
+            padding: 12px 16px;
+            font-family: 'Consolas', 'Courier New', monospace;
+        }
+        .progress-label {
+            color: #569cd6;
+            font-size: 0.85em;
+            margin-bottom: 6px;
+        }
+        .progress-tqdm {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #d4d4d4;
+            font-size: 0.85em;
+        }
+        .progress-bar {
+            flex: 1;
+            height: 14px;
+            background: #3c3c3c;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #4ec9b0;
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+        .progress-pct  { color: #4ec9b0; min-width: 38px; text-align: right; }
+        .progress-count { color: #9cdcfe; white-space: nowrap; }
+        .progress-elapsed { color: #808080; white-space: nowrap; }
+
+        /* 3-pane 비교 뷰 */
+        .comparison-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
         }
 
         .comparison-pane {
@@ -260,245 +203,112 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            max-height: 600px;
+            max-height: 500px;
         }
 
         .pane-header {
             background: #f8f9fa;
-            padding: 15px;
+            padding: 10px 15px;
             border-bottom: 2px solid #dee2e6;
             font-weight: 600;
             color: #333;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
         }
 
-        .pane-content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 15px;
+        .pane-header .pane-title { font-size: 0.95em; }
+
+        .pane-header select {
+            margin-bottom: 0;
+            font-size: 0.85em;
+            padding: 5px 8px;
         }
 
-        .pane-content p {
-            line-height: 1.6;
-            color: #495057;
-            white-space: pre-wrap;
-            word-break: break-word;
-        }
+        .pane-content { flex: 1; overflow-y: auto; padding: 15px; }
+        .pane-content p { line-height: 1.6; color: #495057; white-space: pre-wrap; word-break: break-word; }
+
+        .pane-header.input-header { border-bottom-color: #667eea; }
+        .pane-header.answer1-header { border-bottom-color: #28a745; }
+        .pane-header.answer2-header { border-bottom-color: #fd7e14; }
 
         .empty-state {
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 400px;
+            min-height: 150px;
             color: #999;
             text-align: center;
         }
+        .empty-state-icon { font-size: 2.5em; margin-bottom: 10px; }
 
-        .empty-state-icon {
-            font-size: 3em;
-            margin-bottom: 15px;
-        }
+        /* 행 네비게이션 */
+        .row-nav { display: flex; gap: 10px; align-items: center; margin-top: 15px; }
+        .row-nav button { flex: 1; padding: 10px 15px; }
+        .row-counter { text-align: center; color: #666; font-weight: 500; min-width: 80px; }
 
-        /* 진행 상황 표시 */
-        .progress-section {
-            margin-top: 20px;
-        }
+        /* 스크롤바 */
+        .pane-content::-webkit-scrollbar { width: 6px; }
+        .pane-content::-webkit-scrollbar-track { background: #f1f1f1; }
+        .pane-content::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+        .pane-content::-webkit-scrollbar-thumb:hover { background: #999; }
 
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: #e9ecef;
-            border-radius: 10px;
-            overflow: hidden;
-            margin-bottom: 10px;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-            width: 0%;
-            transition: width 0.3s;
-            border-radius: 10px;
-        }
-
-        .progress-text {
-            text-align: center;
-            font-size: 0.9em;
-            color: #666;
-        }
-
-        /* 상태 메시지 */
-        .status-message {
-            padding: 12px 15px;
-            border-radius: 6px;
-            margin-top: 10px;
-            display: none;
-        }
-
-        .status-message.show {
-            display: block;
-        }
-
-        .status-message.success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .status-message.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        .status-message.info {
-            background: #d1ecf1;
-            color: #0c5460;
-            border: 1px solid #bee5eb;
-        }
-
-        /* 테이블 스타일 */
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-            font-size: 0.9em;
-        }
-
-        .data-table th {
-            background: #f8f9fa;
-            padding: 10px;
-            text-align: left;
-            font-weight: 600;
-            color: #333;
-            border-bottom: 2px solid #dee2e6;
-        }
-
-        .data-table td {
-            padding: 10px;
-            border-bottom: 1px solid #dee2e6;
-            color: #495057;
-            max-width: 200px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .data-table tr:hover {
-            background: #f8f9fa;
-            cursor: pointer;
-        }
-
-        /* 행 선택 */
-        .data-table tr.selected {
-            background: #e7f3ff;
-        }
-
-        /* 반응형 */
         @media (max-width: 1200px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-
-            .comparison-container {
-                grid-template-columns: 1fr;
-            }
-
-            header h1 {
-                font-size: 2em;
-            }
-        }
-
-        /* 스크롤바 스타일 */
-        .pane-content::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .pane-content::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-
-        .pane-content::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 4px;
-        }
-
-        .pane-content::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
-
-        .execution-controls {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .section-divider {
-            grid-column: 1 / -1;
-            height: 1px;
-            background: #e9ecef;
-            margin: 20px 0;
-        }
-
-        .row-nav {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            margin-top: 15px;
-        }
-
-        .row-nav button {
-            flex: 1;
-            padding: 10px 15px;
-        }
-
-        .row-counter {
-            text-align: center;
-            color: #666;
-            font-weight: 500;
-            min-width: 80px;
+            .main-content { grid-template-columns: 1fr; }
+            .comparison-container { grid-template-columns: 1fr; }
+            header h1 { font-size: 2em; }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>📊 LLM Evaluation Helper</h1>
+            <h1>LLM Evaluation Helper</h1>
             <p>프롬프트 변경에 따른 LLM 답변 비교 및 평가 도구</p>
         </header>
 
         <div class="main-content">
-            <!-- 파일 업로드/다운로드 섹션 -->
-            <div class="section file-section">
-                <h2>📁 파일 관리</h2>
+
+            <!-- 파일 관리 -->
+            <div class="section full-width">
+                <h2>파일 관리</h2>
                 <div class="file-controls">
                     <div class="file-input-wrapper">
                         <input type="file" id="fileInput" accept=".xlsx,.csv">
-                        <label for="fileInput" class="file-input-label">📤 Excel/CSV 파일 업로드</label>
+                        <label for="fileInput" class="file-input-label">Excel/CSV 업로드</label>
                     </div>
-                    <button class="btn btn-success" id="downloadBtn" disabled>📥 결과 다운로드</button>
-                    <button class="btn btn-secondary" id="clearBtn">🗑️ 초기화</button>
+                    <button class="btn-primary" id="refreshFilesBtn">서버 파일 목록 새로고침</button>
+                    <button class="btn-success" id="downloadBtn" disabled>결과 다운로드</button>
+                    <button class="btn-secondary" id="clearBtn">초기화</button>
+                </div>
+                <div class="param-group">
+                    <label class="param-label">서버에 있는 파일 선택</label>
+                    <select id="fileSelect">
+                        <option value="">파일을 선택하세요</option>
+                        <optgroup label="📂 data/" id="dataFilesGroup"></optgroup>
+                        <optgroup label="📊 results/" id="resultFilesGroup"></optgroup>
+                    </select>
                 </div>
             </div>
 
-            <!-- 데이터 정보 -->
-            <div class="section file-section">
-                <h2>ℹ️ 파일 정보</h2>
+            <!-- 파일 정보 -->
+            <div class="section">
+                <h2>파일 정보</h2>
                 <div class="data-info">
                     <div class="info-row">
-                        <span class="info-label">파일명:</span>
+                        <span class="info-label">파일명</span>
                         <span class="info-value" id="fileName">-</span>
                     </div>
                     <div class="info-row">
-                        <span class="info-label">시트 수:</span>
+                        <span class="info-label">시트 수</span>
                         <span class="info-value" id="sheetCount">-</span>
                     </div>
                     <div class="info-row">
-                        <span class="info-label">행 수:</span>
+                        <span class="info-label">행 수</span>
                         <span class="info-value" id="rowCount">-</span>
                     </div>
                     <div class="info-row">
-                        <span class="info-label">컬럼:</span>
+                        <span class="info-label">컬럼</span>
                         <span class="info-value" id="columnInfo">-</span>
                     </div>
                 </div>
@@ -506,369 +316,462 @@
 
             <!-- 시트 선택 -->
             <div class="section">
-                <h2>📄 시트 선택</h2>
-                <div class="sheet-selector">
+                <h2>시트 선택</h2>
+                <div class="param-group">
                     <label class="param-label">시트명</label>
                     <select id="sheetSelect" disabled>
-                        <option>시트를 선택하세요</option>
+                        <option value="">시트를 선택하세요</option>
                     </select>
                 </div>
             </div>
 
-            <!-- 매개변수 설정 -->
-            <div class="section">
-                <h2>⚙️ 추론 설정</h2>
+            <!-- 추론 설정 -->
+            <div class="section full-width">
+                <h2>추론 설정</h2>
                 <div class="param-section">
-                    <div class="param-group">
-                        <label class="param-label" for="modelSelect">모델명</label>
-                        <select id="modelSelect">
-                            <option value="">모델을 선택하세요</option>
-                            <option value="model_1">Model 1</option>
-                            <option value="model_2">Model 2</option>
-                        </select>
-                    </div>
-                    <div class="param-group">
-                        <label class="param-label" for="promptSelect">프롬프트 템플릿</label>
-                        <select id="promptSelect">
-                            <option value="">템플릿을 선택하세요</option>
-                            <option value="template_1">Template 1</option>
-                            <option value="template_2">Template 2</option>
-                        </select>
-                    </div>
-                    <div class="param-group">
-                        <label class="param-label" for="inputColumn">입력 컬럼명</label>
-                        <input type="text" id="inputColumn" placeholder="예: question, content">
-                    </div>
-                    <div class="param-group">
-                        <label class="param-label" for="outputColumn">출력 컬럼명</label>
-                        <input type="text" id="outputColumn" placeholder="예: answer, response">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                        <div class="param-group">
+                            <label class="param-label">입력 컬럼</label>
+                            <select id="inputColumnSelect" disabled>
+                                <option value="">시트를 먼저 선택하세요</option>
+                            </select>
+                        </div>
+                        <div class="param-group">
+                            <label class="param-label">모델명</label>
+                            <select id="modelSelect">
+                                <option value="">모델을 선택하세요</option>
+                            </select>
+                        </div>
+                        <div class="param-group">
+                            <label class="param-label">프롬프트 템플릿</label>
+                            <select id="promptSelect">
+                                <option value="">템플릿을 선택하세요</option>
+                            </select>
+                        </div>
+                        <div class="param-group">
+                            <label class="param-label">출력 컬럼명 (새로 저장할 이름)</label>
+                            <input type="text" id="outputColumn" placeholder="예: answer_v1">
+                        </div>
+                        <div class="param-group">
+                            <label class="param-label">결과 파일명 (비워두면 자동 생성)</label>
+                            <input type="text" id="outputFileName" placeholder="예: result_v1.xlsx">
+                        </div>
                     </div>
                 </div>
 
                 <div class="execution-controls">
-                    <button class="btn btn-success" id="startBtn" disabled>▶️ 추론 시작</button>
-                    <button class="btn btn-danger" id="stopBtn" disabled>⏹️ 중지</button>
+                    <button class="btn-success" id="startBtn" disabled>추론 시작</button>
+                    <button class="btn-danger" id="stopBtn" disabled>중지</button>
                 </div>
 
                 <div class="status-message" id="statusMessage"></div>
 
                 <div class="progress-section" id="progressSection" style="display: none;">
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progressFill"></div>
+                    <div class="progress-label">추론 진행 중...</div>
+                    <div class="progress-tqdm">
+                        <span class="progress-pct" id="progressPct">0%</span>
+                        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+                        <span class="progress-count" id="progressCount">0/0</span>
+                        <span class="progress-elapsed" id="progressElapsed">[00:00]</span>
                     </div>
-                    <div class="progress-text" id="progressText">준비 중...</div>
                 </div>
             </div>
 
-            <div class="section-divider"></div>
-
-            <!-- 비교 뷰 -->
-            <div class="section comparison-section">
-                <h2>🔄 답변 비교</h2>
+            <!-- 답변 비교 뷰 -->
+            <div class="section full-width">
+                <h2>답변 비교</h2>
                 <div class="comparison-container">
+
+                    <!-- 입력 -->
                     <div class="comparison-pane">
-                        <div class="pane-header">원본 데이터</div>
-                        <div class="pane-content">
+                        <div class="pane-header input-header">
+                            <span class="pane-title">입력</span>
+                            <select id="inputViewCol" disabled>
+                                <option value="">컬럼 선택</option>
+                            </select>
+                        </div>
+                        <div class="pane-content" id="inputPane">
                             <div class="empty-state">
                                 <div>
                                     <div class="empty-state-icon">📋</div>
-                                    <p>시트를 선택하고 행을 클릭하면<br/>원본 데이터가 표시됩니다</p>
+                                    <p>시트를 선택하면<br>데이터가 표시됩니다</p>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <!-- LLM 답변 1 -->
                     <div class="comparison-pane">
-                        <div class="pane-header">LLM 답변</div>
-                        <div class="pane-content">
+                        <div class="pane-header answer1-header">
+                            <span class="pane-title">LLM 답변 1</span>
+                            <select id="answer1Col" disabled>
+                                <option value="">컬럼 선택</option>
+                            </select>
+                        </div>
+                        <div class="pane-content" id="answer1Pane">
                             <div class="empty-state">
                                 <div>
                                     <div class="empty-state-icon">🤖</div>
-                                    <p>추론 실행 후<br/>LLM의 답변이 표시됩니다</p>
+                                    <p>답변 컬럼을<br>선택하세요</p>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <!-- LLM 답변 2 -->
+                    <div class="comparison-pane">
+                        <div class="pane-header answer2-header">
+                            <span class="pane-title">LLM 답변 2</span>
+                            <select id="answer2Col" disabled>
+                                <option value="">컬럼 선택</option>
+                            </select>
+                        </div>
+                        <div class="pane-content" id="answer2Pane">
+                            <div class="empty-state">
+                                <div>
+                                    <div class="empty-state-icon">🤖</div>
+                                    <p>답변 컬럼을<br>선택하세요</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
                 <div class="row-nav">
-                    <button class="btn btn-secondary" id="prevRowBtn" disabled>◀️ 이전</button>
+                    <button class="btn-secondary" id="prevRowBtn" disabled>이전</button>
                     <div class="row-counter">
                         <span id="currentRow">0</span> / <span id="totalRows">0</span>
                     </div>
-                    <button class="btn btn-secondary" id="nextRowBtn" disabled>다음 ▶️</button>
+                    <button class="btn-secondary" id="nextRowBtn" disabled>다음</button>
                 </div>
             </div>
 
-            <!-- 데이터 테이블 -->
-            <div class="section comparison-section">
-                <h2>📊 데이터 테이블</h2>
-                <div style="overflow-x: auto; max-height: 400px; overflow-y: auto;">
-                    <table class="data-table" id="dataTable">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>상태</th>
-                                <th id="col-input">입력</th>
-                                <th id="col-output">출력</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tableBody">
-                            <tr>
-                                <td colspan="4" style="text-align: center; padding: 40px;">
-                                    <div class="empty-state">
-                                        <div class="empty-state-icon">📁</div>
-                                        <p>파일을 업로드하면 데이터가 표시됩니다</p>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
         </div>
     </div>
 
     <script>
-        // 전역 상태
+        const API = '';
+
         const state = {
-            file: null,
             fileName: null,
             currentSheet: null,
-            sheets: [],
-            data: null,
+            data: [],
+            columns: [],
             currentRowIndex: 0,
             isProcessing: false,
-            results: {}
         };
 
-        // DOM 요소
-        const fileInput = document.getElementById('fileInput');
-        const downloadBtn = document.getElementById('downloadBtn');
-        const clearBtn = document.getElementById('clearBtn');
-        const sheetSelect = document.getElementById('sheetSelect');
-        const modelSelect = document.getElementById('modelSelect');
-        const promptSelect = document.getElementById('promptSelect');
-        const inputColumnInput = document.getElementById('inputColumn');
+        // DOM
+        const fileInput         = document.getElementById('fileInput');
+        const fileSelect        = document.getElementById('fileSelect');
+        const refreshFilesBtn   = document.getElementById('refreshFilesBtn');
+        const downloadBtn       = document.getElementById('downloadBtn');
+        const clearBtn          = document.getElementById('clearBtn');
+        const sheetSelect       = document.getElementById('sheetSelect');
+        const inputColumnSelect = document.getElementById('inputColumnSelect');
+        const modelSelect       = document.getElementById('modelSelect');
+        const promptSelect      = document.getElementById('promptSelect');
         const outputColumnInput = document.getElementById('outputColumn');
-        const startBtn = document.getElementById('startBtn');
-        const stopBtn = document.getElementById('stopBtn');
-        const statusMessage = document.getElementById('statusMessage');
-        const progressSection = document.getElementById('progressSection');
-        const progressFill = document.getElementById('progressFill');
-        const progressText = document.getElementById('progressText');
-        const prevRowBtn = document.getElementById('prevRowBtn');
-        const nextRowBtn = document.getElementById('nextRowBtn');
-        const currentRowSpan = document.getElementById('currentRow');
-        const totalRowsSpan = document.getElementById('totalRows');
+        const startBtn          = document.getElementById('startBtn');
+        const stopBtn           = document.getElementById('stopBtn');
+        const statusMessage     = document.getElementById('statusMessage');
+        const progressSection   = document.getElementById('progressSection');
+        const progressFill      = document.getElementById('progressFill');
+        const progressText      = document.getElementById('progressText');
+        const prevRowBtn        = document.getElementById('prevRowBtn');
+        const nextRowBtn        = document.getElementById('nextRowBtn');
+        const currentRowSpan    = document.getElementById('currentRow');
+        const totalRowsSpan     = document.getElementById('totalRows');
+        const inputViewCol      = document.getElementById('inputViewCol');
+        const answer1Col        = document.getElementById('answer1Col');
+        const answer2Col        = document.getElementById('answer2Col');
 
-        // 파일 업로드 처리
+        // 이벤트
         fileInput.addEventListener('change', handleFileUpload);
-        clearBtn.addEventListener('click', handleClear);
+        fileSelect.addEventListener('change', handleFileSelect);
+        refreshFilesBtn.addEventListener('click', loadFileList);
         downloadBtn.addEventListener('click', handleDownload);
+        clearBtn.addEventListener('click', handleClear);
         sheetSelect.addEventListener('change', handleSheetSelect);
         startBtn.addEventListener('click', handleStartInference);
         stopBtn.addEventListener('click', handleStopInference);
-        prevRowBtn.addEventListener('click', handlePrevRow);
-        nextRowBtn.addEventListener('click', handleNextRow);
+        prevRowBtn.addEventListener('click', () => displayRow(state.currentRowIndex - 1));
+        nextRowBtn.addEventListener('click', () => displayRow(state.currentRowIndex + 1));
+        inputViewCol.addEventListener('change', () => displayRow(state.currentRowIndex));
+        answer1Col.addEventListener('change', () => displayRow(state.currentRowIndex));
+        answer2Col.addEventListener('change', () => displayRow(state.currentRowIndex));
 
-        function handleFileUpload(event) {
-            const file = event.target.files[0];
+        // ── 파일 목록 ──────────────────────────────────────────────
+        async function loadFileList() {
+            try {
+                const res = await fetch(`${API}/files`);
+                if (!res.ok) throw new Error(`${res.status}`);
+                const data = await res.json();
+
+                const dataGroup   = document.getElementById('dataFilesGroup');
+                const resultGroup = document.getElementById('resultFilesGroup');
+                dataGroup.innerHTML   = '';
+                resultGroup.innerHTML = '';
+
+                data.data_files.forEach(f => {
+                    const opt = document.createElement('option');
+                    opt.value = f;
+                    opt.textContent = f;
+                    dataGroup.appendChild(opt);
+                });
+
+                data.result_files.forEach(f => {
+                    const opt = document.createElement('option');
+                    opt.value = f;
+                    opt.textContent = f;
+                    resultGroup.appendChild(opt);
+                });
+
+                const total = data.data_files.length + data.result_files.length;
+                showMessage(`data ${data.data_files.length}개, results ${data.result_files.length}개`, 'info');
+            } catch (e) {
+                showMessage(`파일 목록 조회 실패: ${e.message}`, 'error');
+            }
+        }
+
+        function handleFileSelect(e) {
+            const fileName = e.target.value;
+            if (!fileName) return;
+            state.fileName = fileName;
+            loadFileInfo(fileName);
+        }
+
+        // ── 파일 업로드 ────────────────────────────────────────────
+        async function handleFileUpload(e) {
+            const file = e.target.files[0];
             if (!file) return;
 
-            state.file = file;
-            state.fileName = file.name;
+            const formData = new FormData();
+            formData.append('file', file);
 
-            // 파일 읽기 (실제로는 서버에서 처리)
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                try {
-                    // 여기서 Excel 파일 파싱 (실제 구현은 서버에서)
-                    showMessage(`파일 '${state.fileName}'이(가) 업로드되었습니다.`, 'info');
-                    updateFileInfo();
-                    loadSheets();
-                } catch (error) {
-                    showMessage(`파일 읽기 오류: ${error.message}`, 'error');
-                }
-            };
-            reader.readAsArrayBuffer(file);
-        }
-
-        function updateFileInfo() {
-            document.getElementById('fileName').textContent = state.fileName || '-';
-            // 실제 값은 서버에서 가져옴
-            document.getElementById('sheetCount').textContent = '0';
-            document.getElementById('rowCount').textContent = '0';
-            document.getElementById('columnInfo').textContent = '-';
-        }
-
-        function loadSheets() {
-            // 서버에서 시트 목록 조회
-            // 임시로 예제 데이터 사용
-            state.sheets = ['Sheet1', 'Sheet2', 'Sheet3'];
-            
-            sheetSelect.innerHTML = '<option>시트를 선택하세요</option>';
-            state.sheets.forEach(sheet => {
-                const option = document.createElement('option');
-                option.value = sheet;
-                option.textContent = sheet;
-                sheetSelect.appendChild(option);
-            });
-            
-            sheetSelect.disabled = false;
-        }
-
-        function handleSheetSelect(event) {
-            state.currentSheet = event.target.value;
-            state.currentRowIndex = 0;
-            
-            if (!state.currentSheet) {
-                clearComparisonView();
-                return;
+            try {
+                const res = await fetch(`${API}/upload`, { method: 'POST', body: formData });
+                if (!res.ok) throw new Error(`${res.status}`);
+                showMessage(`'${file.name}' 업로드 완료`, 'success');
+                await loadFileList();
+                // 업로드한 파일 자동 선택
+                fileSelect.value = file.name;
+                state.fileName = file.name;
+                await loadFileInfo(file.name);
+            } catch (e) {
+                showMessage(`업로드 실패: ${e.message}`, 'error');
             }
-
-            // 서버에서 시트 데이터 조회
-            showMessage(`시트 '${state.currentSheet}'를 선택했습니다.`, 'info');
-            loadSheetData();
         }
 
-        function loadSheetData() {
-            // 서버에서 데이터 로드
-            // 임시로 예제 데이터 사용
-            state.data = [
-                { id: 1, question: 'Python이란 무엇인가?', answer: null },
-                { id: 2, question: 'JavaScript의 용도는?', answer: null },
-                { id: 3, question: 'FastAPI의 장점은?', answer: null }
-            ];
+        // ── 파일 정보 ──────────────────────────────────────────────
+        async function loadFileInfo(fileName) {
+            try {
+                const res = await fetch(`${API}/file/${encodeURIComponent(fileName)}`);
+                if (!res.ok) throw new Error(`${res.status}`);
+                const info = await res.json();
 
-            totalRowsSpan.textContent = state.data.length;
-            updateTableView();
-            updateNavigationButtons();
-            displayRow(0);
+                document.getElementById('fileName').textContent = info.file_name;
+                document.getElementById('sheetCount').textContent = info.sheet_count;
+                document.getElementById('rowCount').textContent = '-';
+                document.getElementById('columnInfo').textContent = '-';
+
+                sheetSelect.innerHTML = '<option value="">시트를 선택하세요</option>';
+                info.sheets.forEach(s => {
+                    const opt = document.createElement('option');
+                    opt.value = s;
+                    opt.textContent = s;
+                    sheetSelect.appendChild(opt);
+                });
+                sheetSelect.disabled = false;
+                startBtn.disabled = false;
+            } catch (e) {
+                showMessage(`파일 정보 조회 실패: ${e.message}`, 'error');
+            }
         }
 
+        // ── 설정 (모델/프롬프트) ───────────────────────────────────
+        async function loadConfig() {
+            try {
+                const res = await fetch(`${API}/config`);
+                if (!res.ok) return;
+                const cfg = await res.json();
+
+                modelSelect.innerHTML = '<option value="">모델을 선택하세요</option>';
+                cfg.models.forEach(m => {
+                    const opt = document.createElement('option');
+                    opt.value = m;
+                    opt.textContent = m;
+                    modelSelect.appendChild(opt);
+                });
+
+                promptSelect.innerHTML = '<option value="">템플릿을 선택하세요</option>';
+                cfg.prompts.forEach(p => {
+                    const opt = document.createElement('option');
+                    opt.value = p;
+                    opt.textContent = p;
+                    promptSelect.appendChild(opt);
+                });
+            } catch (e) {
+                console.warn('설정 로드 실패:', e.message);
+            }
+        }
+
+        // ── 시트 선택 ──────────────────────────────────────────────
+        async function handleSheetSelect(e) {
+            state.currentSheet = e.target.value;
+            if (!state.currentSheet) return;
+            await loadSheetData();
+        }
+
+        async function loadSheetData() {
+            try {
+                const url = `${API}/data?file_name=${encodeURIComponent(state.fileName)}&sheet_name=${encodeURIComponent(state.currentSheet)}`;
+                const res = await fetch(url);
+                if (!res.ok) throw new Error(`${res.status}`);
+                const result = await res.json();
+
+                state.data = result.data;
+                state.columns = result.columns;
+
+                // 파일 정보 업데이트
+                document.getElementById('rowCount').textContent = result.row_count;
+                document.getElementById('columnInfo').textContent = result.columns.join(', ');
+
+                // 컬럼 드롭다운 채우기
+                populateColumnSelects(result.columns);
+
+                totalRowsSpan.textContent = result.row_count;
+                displayRow(0);
+                showMessage(`'${state.currentSheet}' 시트 로드 완료 (${result.row_count}행)`, 'info');
+            } catch (e) {
+                showMessage(`데이터 조회 실패: ${e.message}`, 'error');
+            }
+        }
+
+        function populateColumnSelects(columns) {
+            const selects = [inputColumnSelect, inputViewCol, answer1Col, answer2Col];
+            selects.forEach(sel => {
+                const prev = sel.value;
+                sel.innerHTML = '<option value="">컬럼 선택</option>';
+                columns.forEach(col => {
+                    const opt = document.createElement('option');
+                    opt.value = col;
+                    opt.textContent = col;
+                    sel.appendChild(opt);
+                });
+                if (columns.includes(prev)) sel.value = prev;
+                sel.disabled = false;
+            });
+
+            // 추론 설정의 입력 컬럼도 동기화
+            if (columns.length > 0 && !inputColumnSelect.value) {
+                inputColumnSelect.value = columns[0];
+                inputViewCol.value = columns[0];
+            }
+        }
+
+        // ── 행 표시 ────────────────────────────────────────────────
         function displayRow(index) {
-            if (!state.data || index < 0 || index >= state.data.length) return;
-
+            if (!state.data.length || index < 0 || index >= state.data.length) return;
             state.currentRowIndex = index;
             currentRowSpan.textContent = index + 1;
 
             const row = state.data[index];
-            const inputCol = inputColumnInput.value || 'question';
-            const outputCol = outputColumnInput.value || 'answer';
 
-            // 원본 데이터 표시
-            const leftPane = document.querySelectorAll('.comparison-pane')[0].querySelector('.pane-content');
-            leftPane.innerHTML = `<p>${row[inputCol] || '데이터 없음'}</p>`;
+            renderPane('inputPane',  row, inputViewCol.value,  '입력 컬럼을 선택하세요');
+            renderPane('answer1Pane', row, answer1Col.value,   '답변 컬럼을 선택하세요');
+            renderPane('answer2Pane', row, answer2Col.value,   '답변 컬럼을 선택하세요');
 
-            // LLM 답변 표시
-            const rightPane = document.querySelectorAll('.comparison-pane')[1].querySelector('.pane-content');
-            if (row[outputCol]) {
-                rightPane.innerHTML = `<p>${row[outputCol]}</p>`;
+            updateNavButtons();
+        }
+
+        function renderPane(paneId, row, col, emptyMsg) {
+            const pane = document.getElementById(paneId);
+            if (!col) {
+                pane.innerHTML = `<div class="empty-state"><div><div class="empty-state-icon">👆</div><p>${emptyMsg}</p></div></div>`;
+                return;
+            }
+            const val = row[col];
+            if (val === undefined || val === null || val === '') {
+                pane.innerHTML = `<div class="empty-state"><div><div class="empty-state-icon">⏳</div><p>데이터 없음</p></div></div>`;
             } else {
-                rightPane.innerHTML = '<div class="empty-state"><div><div class="empty-state-icon">⏳</div><p>아직 답변이 없습니다</p></div></div>';
-            }
-
-            updateTableView();
-            updateNavigationButtons();
-        }
-
-        function updateTableView() {
-            if (!state.data) return;
-
-            const tbody = document.getElementById('tableBody');
-            tbody.innerHTML = '';
-
-            state.data.forEach((row, idx) => {
-                const tr = document.createElement('tr');
-                if (idx === state.currentRowIndex) tr.classList.add('selected');
-                
-                const hasAnswer = row[outputColumnInput.value || 'answer'];
-                const status = hasAnswer ? '✅ 완료' : '⏳ 대기';
-                
-                tr.innerHTML = `
-                    <td>${idx + 1}</td>
-                    <td>${status}</td>
-                    <td>${String(row[inputColumnInput.value || 'question']).substring(0, 50)}</td>
-                    <td>${row[outputColumnInput.value || 'answer'] ? String(row[outputColumnInput.value || 'answer']).substring(0, 50) : '-'}</td>
-                `;
-                
-                tr.addEventListener('click', () => displayRow(idx));
-                tbody.appendChild(tr);
-            });
-        }
-
-        function updateNavigationButtons() {
-            prevRowBtn.disabled = state.currentRowIndex <= 0 || !state.data;
-            nextRowBtn.disabled = state.currentRowIndex >= (state.data?.length - 1) || !state.data;
-        }
-
-        function handlePrevRow() {
-            if (state.currentRowIndex > 0) {
-                displayRow(state.currentRowIndex - 1);
+                pane.innerHTML = `<p>${String(val)}</p>`;
             }
         }
 
-        function handleNextRow() {
-            if (state.currentRowIndex < state.data.length - 1) {
-                displayRow(state.currentRowIndex + 1);
-            }
+        function updateNavButtons() {
+            prevRowBtn.disabled = state.currentRowIndex <= 0;
+            nextRowBtn.disabled = state.currentRowIndex >= state.data.length - 1;
         }
 
+        // ── 추론 실행 ──────────────────────────────────────────────
         async function handleStartInference() {
             if (!state.fileName || !state.currentSheet) {
-                showMessage('파일과 시트를 먼저 선택하세요.', 'error');
-                return;
+                showMessage('파일과 시트를 먼저 선택하세요.', 'error'); return;
             }
-
             if (!modelSelect.value || !promptSelect.value) {
-                showMessage('모델과 프롬프트 템플릿을 선택하세요.', 'error');
-                return;
+                showMessage('모델과 프롬프트 템플릿을 선택하세요.', 'error'); return;
             }
-
-            if (!inputColumnInput.value || !outputColumnInput.value) {
-                showMessage('입력/출력 컬럼명을 입력하세요.', 'error');
-                return;
+            if (!inputColumnSelect.value || !outputColumnInput.value.trim()) {
+                showMessage('입력 컬럼과 출력 컬럼명을 입력하세요.', 'error'); return;
             }
 
             state.isProcessing = true;
             startBtn.disabled = true;
             stopBtn.disabled = false;
+            resetProgress();
             progressSection.style.display = 'block';
 
-            const params = {
-                file_name: state.fileName,
-                sheet_name: state.currentSheet,
-                model_name: modelSelect.value,
-                prompt_template: promptSelect.value,
-                input_column: inputColumnInput.value,
-                output_column: outputColumnInput.value
-            };
-
             try {
-                // 서버로 요청 전송
-                const response = await fetch('/evaluate', {
+                const res = await fetch(`${API}/evaluate`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(params)
+                    body: JSON.stringify({
+                        file_name: state.fileName,
+                        sheet_name: state.currentSheet,
+                        model_name: modelSelect.value,
+                        prompt_template: promptSelect.value,
+                        input_column: inputColumnSelect.value,
+                        output_column: outputColumnInput.value.trim(),
+                        output_file_name: document.getElementById('outputFileName').value.trim() || null
+                    })
                 });
+                if (!res.ok) throw new Error(`${res.status}`);
+                const result = await res.json();
 
-                if (!response.ok) {
-                    throw new Error(`Server error: ${response.status}`);
-                }
-
-                const result = await response.json();
-                showMessage(`추론 완료! 처리된 행: ${result.processed_rows}`, 'success');
-                downloadBtn.disabled = false;
-                
-                // 결과 데이터 로드
-                loadSheetData();
-            } catch (error) {
-                showMessage(`오류: ${error.message}`, 'error');
+                // 작업 완료 대기
+                await pollTaskStatus(result.task_id);
+            } catch (e) {
+                showMessage(`오류: ${e.message}`, 'error');
             } finally {
                 state.isProcessing = false;
                 startBtn.disabled = false;
                 stopBtn.disabled = true;
                 progressSection.style.display = 'none';
+            }
+        }
+
+        async function pollTaskStatus(taskId) {
+            while (true) {
+                await new Promise(r => setTimeout(r, 1000));
+                try {
+                    const res = await fetch(`${API}/task/${taskId}`);
+                    if (!res.ok) break;
+                    const task = await res.json();
+
+                    if (task.total > 0) updateProgress(task.progress, task.total);
+
+                    if (task.status === 'completed') {
+                        showMessage(`추론 완료! (${task.total}행 처리)`, 'success');
+                        downloadBtn.disabled = false;
+                        await loadSheetData();
+                        break;
+                    } else if (task.status === 'failed') {
+                        showMessage(`추론 실패: ${task.error_message}`, 'error');
+                        break;
+                    }
+                } catch (e) { break; }
             }
         }
 
@@ -881,69 +784,78 @@
         }
 
         function handleDownload() {
-            if (!state.fileName) {
-                showMessage('다운로드할 파일이 없습니다.', 'error');
-                return;
-            }
-
-            // 서버에서 결과 파일 다운로드
-            window.location.href = `/download?file_name=${encodeURIComponent(state.fileName)}`;
-            showMessage('파일 다운로드가 시작되었습니다.', 'success');
+            if (!state.fileName) { showMessage('다운로드할 파일이 없습니다.', 'error'); return; }
+            window.location.href = `${API}/download?file_name=${encodeURIComponent(state.fileName)}`;
         }
 
         function handleClear() {
-            state.file = null;
             state.fileName = null;
             state.currentSheet = null;
-            state.sheets = [];
-            state.data = null;
+            state.data = [];
+            state.columns = [];
             state.currentRowIndex = 0;
-            
+
             fileInput.value = '';
+            fileSelect.value = '';
+            document.getElementById('outputFileName').value = '';
+            sheetSelect.innerHTML = '<option value="">시트를 선택하세요</option>';
             sheetSelect.disabled = true;
-            sheetSelect.innerHTML = '<option>시트를 선택하세요</option>';
             downloadBtn.disabled = true;
             startBtn.disabled = true;
-            
+
             document.getElementById('fileName').textContent = '-';
             document.getElementById('sheetCount').textContent = '-';
             document.getElementById('rowCount').textContent = '-';
             document.getElementById('columnInfo').textContent = '-';
-            
-            clearComparisonView();
-            document.getElementById('tableBody').innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 40px;"><div class="empty-state"><div class="empty-state-icon">📁</div><p>파일을 업로드하면 데이터가 표시됩니다</p></div></td></tr>';
-            
-            showMessage('모든 데이터가 초기화되었습니다.', 'info');
-        }
+            currentRowSpan.textContent = '0';
+            totalRowsSpan.textContent = '0';
 
-        function clearComparisonView() {
-            const panes = document.querySelectorAll('.comparison-pane .pane-content');
-            panes.forEach(pane => {
-                pane.innerHTML = '<div class="empty-state"><div><div class="empty-state-icon">📋</div><p>시트를 선택하고 행을 클릭하면<br/>원본 데이터가 표시됩니다</p></div></div>';
+            [inputColumnSelect, inputViewCol, answer1Col, answer2Col].forEach(sel => {
+                sel.innerHTML = '<option value="">컬럼 선택</option>';
+                sel.disabled = true;
             });
+
+            ['inputPane', 'answer1Pane', 'answer2Pane'].forEach(id => {
+                document.getElementById(id).innerHTML = '<div class="empty-state"><div><div class="empty-state-icon">📋</div><p>시트를 선택하면<br>데이터가 표시됩니다</p></div></div>';
+            });
+
+            prevRowBtn.disabled = true;
+            nextRowBtn.disabled = true;
+            showMessage('초기화되었습니다.', 'info');
         }
 
-        function showMessage(message, type) {
-            statusMessage.textContent = message;
+        function showMessage(msg, type) {
+            statusMessage.textContent = msg;
             statusMessage.className = `status-message show ${type}`;
-            
-            if (type !== 'error') {
-                setTimeout(() => {
-                    statusMessage.classList.remove('show');
-                }, 4000);
-            }
+            if (type !== 'error') setTimeout(() => statusMessage.classList.remove('show'), 4000);
         }
+
+        let _progressStart = null;
 
         function updateProgress(current, total) {
-            const percentage = (current / total) * 100;
-            progressFill.style.width = percentage + '%';
-            progressText.textContent = `진행: ${current} / ${total}`;
+            if (!_progressStart) _progressStart = Date.now();
+            const pct = total > 0 ? Math.round((current / total) * 100) : 0;
+            const elapsed = Math.floor((Date.now() - _progressStart) / 1000);
+            const mm = String(Math.floor(elapsed / 60)).padStart(2, '0');
+            const ss = String(elapsed % 60).padStart(2, '0');
+
+            progressFill.style.width = pct + '%';
+            document.getElementById('progressPct').textContent   = pct + '%';
+            document.getElementById('progressCount').textContent = `${current}/${total}`;
+            document.getElementById('progressElapsed').textContent = `[${mm}:${ss}]`;
         }
 
-        // 초기화
-        startBtn.disabled = true;
-        downloadBtn.disabled = true;
-        sheetSelect.disabled = true;
+        function resetProgress() {
+            _progressStart = null;
+            progressFill.style.width = '0%';
+            document.getElementById('progressPct').textContent    = '0%';
+            document.getElementById('progressCount').textContent  = '0/0';
+            document.getElementById('progressElapsed').textContent = '[00:00]';
+        }
+
+        // 초기 로드
+        loadConfig();
+        loadFileList();
     </script>
 </body>
 </html>

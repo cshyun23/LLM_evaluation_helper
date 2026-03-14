@@ -4,6 +4,7 @@ vLLM 클라이언트 모듈
 """
 
 import logging
+import random
 import requests
 import time
 from typing import Dict, Any, Optional, List
@@ -83,8 +84,8 @@ class DummyLLMClient(LLMClientBase):
             f"이것은 '{question}'에 대한 더미 응답입니다. 실제 {model} 모델의 응답은 vLLM 서버를 통해 얻을 수 있습니다."
         )
         
-        # 시뮬레이션: 약간의 지연
-        time.sleep(0.5)
+        # 시뮬레이션: 행당 1~2초 지연
+        time.sleep(1 + random.random())
         
         logger.debug(f"더미 응답 생성 #{self.call_count}: {question[:50]}...")
         return response
